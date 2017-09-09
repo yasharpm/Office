@@ -8,12 +8,12 @@ ext {
     libraryName = 'Office'
     artifact = 'office'
 
-    libraryDescription = 'TODO'
+    libraryDescription = 'Office is a powerful threading tool that can have multiple thread groups in the back and allows for defining dependencies for running tasks.'
 
     siteUrl = 'https://github.com/yasharpm/Office'
     gitUrl = 'https://github.com/yasharpm/Office.git'
 
-    libraryVersion = '1.0.0'
+    libraryVersion = '1.0.1'
 
     developerId = 'yasharpm'
     developerName = 'Yashar PourMohammad'
@@ -53,5 +53,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'com.android.support:support-v13:25.0.0'
     testCompile 'junit:junit:4.12'
 }
