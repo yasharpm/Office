@@ -69,8 +69,26 @@ Many methods are defined in `TaskManager` to send tasks to it for execution. All
 
 - Methods ending in "AndWait" block the calling thread until the execution finishes.
 - Methods ending in "Immediately" will create a disposable new thread to perform the task immediately.
+- `TaskManager.MAIN` is the section name reserved for main thread.
+- Calling waiting methods on sections that have only one thread (like main section) will cause a dead lock.
 - `cancel` can be called to cancel the execution of a task. It will return false if the task is in execution or is already finished or not found.
 
 Some libraries like Picasso or Retrofit can be fed an `Executor` to perform their async tasks on. Call `TaskManager.getExecutor()` to get an `Executor` instance on your desired section and your preferred priority.
 
 ### Async Operation
+`AsyncOperation` is a similar equivalent to Android's native `AsyncTask`. The difference is you can choose which section the background method gets called on. All `AsyncTask` functionalities have been defined into `AsyncOperation`.
+
+It is also possible to create the `AsyncOperation` outside the main thread. It already has access to it through the `TaskManager`.
+
+### Dependency Operation
+`DependencyOperation` is a strong tool in cases that your operation is more complicated than usual. It has the ability to induce dependency on task groups. For any set of `TaskGroup`s you can define a rule to be run after another set of `TaskGroup`s have finished running. A `TaskGroup` istself can be consisted of one or more tasks to be executed in parallal or in a serie.
+
+In order to create a `DependencyOperation` instance you can use the `OperationBuilder`. `OperationBuilder` class has convenient methods to define `TaskGroup`s and then define the dependencies between them. By calling `OperationBuilder.build()` you get the `DependencyOperation` instance. Build method can be called many times to create more operations with the same config. The operation won't start running unless you specifically call `DependencyOperation.start()`.
+
+It is also possible to directly create a `DependencyOperation` through its public constructor. Calling `DependencyOperation.perform()` method will cause the operation to start and immediately react to the `TaskGroup`s you have provided.
+
+- Performed `TaskGroup`s are recorded inside the `DependencyOperation`. So it is guaranteed that the class won't forget it has run it.
+- You can keep a `DependencyOperation` instance to perform dependent tasks whenever you want.
+- After a `TaskGroup` is performed, the memory for the tasks will be released. So there is no limit on the number of `TaskGroup`s you send to the operation to be run.
+
+### Task Group
