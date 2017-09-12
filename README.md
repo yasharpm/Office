@@ -81,7 +81,7 @@ Some libraries like Picasso or Retrofit can be fed an `Executor` to perform thei
 It is also possible to create the `AsyncOperation` outside the main thread. It already has access to it through the `TaskManager`.
 
 ### Dependency Operation
-`DependencyOperation` is a strong tool in cases that your operation is more complicated than usual. It has the ability to induce dependency on task groups. For any set of `TaskGroup`s you can define a rule to be run after another set of `TaskGroup`s have finished running. A `TaskGroup` istself can be consisted of one or more tasks to be executed in parallal or in a serie.
+`DependencyOperation` is a strong tool in cases that your operation is more complicated than usual. It has the ability to induce dependency on task groups. For any set of `TaskGroup`s you can define a rule to be run after another set of `TaskGroup`s have finished running. A `TaskGroup` itself can be consisted of one or more tasks to be executed in parallal or in a serie.
 
 In order to create a `DependencyOperation` instance you can use the `OperationBuilder`. `OperationBuilder` class has convenient methods to define `TaskGroup`s and then define the dependencies between them. By calling `OperationBuilder.build()` you get the `DependencyOperation` instance. Build method can be called many times to create more operations with the same config. The operation won't start running unless you specifically call `DependencyOperation.start()`.
 
@@ -92,3 +92,16 @@ It is also possible to directly create a `DependencyOperation` through its publi
 - After a `TaskGroup` is performed, the memory for the tasks will be released. So there is no limit on the number of `TaskGroup`s you send to the operation to be run.
 
 ### Task Group
+A `TaskGroup` holds one or more tasks to be executed in parallel or one after another. You can get a `TaskGroup` instance by calling either of the `OperationBuilder.singleTask()` or `OperationBuilder.sequentialTasks()` or `OperationBuilder.parallelTasks()` methods. These methods are about taking a set of `Runnable`s to run and the section to run them in and the priority to run them with.
+
+There is a special constructor for `TaskGroup` in `OperationBuilder` that received an `Object` to be the "runnerObject" and one or more `String`(s) to be the "runnerMethod"(s). The task will berun using reflection by calling `runnerObject.runnerMethod()`. It is useful when you have the methods defined in your object and saves you from creating a `Runnable` for every task.
+
+- Having a task group is actually redundant because `DependencyOperation`'s rules can provide the same functionality. But it allows for more flexibility in writing code. In most cases you will only need to call `OperationBuilder.singleTask()` methods.
+- `TaskGroup` creates instances of `TaskDescriptor` inside of it. If you want the tasks inside a `TaskGroup` to be run on various sections you can create `TaskDescriptor`s directly by calling `OperationBuilder.newTasks()` methods.
+- Both `TaskGroup` and `TaskDescriptor` classes are public and can be subclassd or created directly too.
+- `DependencyOperation` uses `Object.equals()` methods to determine whether it has performed a task or not. For your special customizations you can subclass a `TaskGroup` and override the "equals" methods. Have in mind that `TaskDescriptor`s inside the `TaskGroup` will be set to `null` afther the `TaskGroup` has finished running.
+
+## Notes
+Both `AsyncOperation` and `DependencyOperation` are subclassed from `Operation`. Learning `Operation` class itself in unneccessary. It is only worth mentioning that calling `cancelAllTasks()` on `Operation` subclasses will stop everything. Except the tasks that are already being run. Tasks under execution will never be interrupted in Office.
+
+Office is inspired by how things work in an actual office that has multiple sections with different purposes and each section has multiple employees that when requested to perform a task, will perform certain actions. Hence the name is "Office".
