@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public abstract class AsyncOperation extends Operation {
 
+    private String mForegroundSection;
     private String mBackgroundSection;
 
     private long mPreExecuteTaskId;
@@ -25,14 +26,19 @@ public abstract class AsyncOperation extends Operation {
 
     private Object mStateLock = new Object();
 
-    public AsyncOperation(TaskManager taskManager, String backgroundSection) {
+    public AsyncOperation(TaskManager taskManager, String foregroundSection, String backgroundSection) {
         super(taskManager);
 
         if (backgroundSection == null) {
             throw new IllegalArgumentException("Background section name can not be null.");
         }
 
+        mForegroundSection = foregroundSection;
         mBackgroundSection = backgroundSection;
+    }
+
+    public AsyncOperation(TaskManager taskManager, String backgroundSection) {
+        this(taskManager, TaskManager.MAIN, backgroundSection);
     }
 
     public void execute() {
@@ -44,9 +50,9 @@ public abstract class AsyncOperation extends Operation {
             mExecuted = true;
         }
 
-        Task preExecuteTask = newTask(TaskManager.MAIN);
+        Task preExecuteTask = newTask(mForegroundSection);
         Task backgroundTask = newTask(mBackgroundSection);
-        Task postExecuteTask = newTask(TaskManager.MAIN);
+        Task postExecuteTask = newTask(mForegroundSection);
 
         mPreExecuteTaskId = preExecuteTask.getId();
         mBackgroundTaskId = backgroundTask.getId();
@@ -126,7 +132,7 @@ public abstract class AsyncOperation extends Operation {
             mPublishes.add(object);
         }
 
-        Task publishTask = newTask(TaskManager.MAIN);
+        Task publishTask = newTask(mForegroundSection);
         runTask(publishTask);
     }
 
