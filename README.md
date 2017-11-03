@@ -19,7 +19,7 @@ You don't want to make other async operations to wait for this process to end. M
 Add the dependency:
 ```Groovy
 dependencies {
-	compile 'com.yashoid:office:1.0.1'
+	compile 'com.yashoid:office:1.1.0'
 }
 ```
 
