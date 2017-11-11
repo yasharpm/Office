@@ -19,7 +19,7 @@ You don't want to make other async operations to wait for this process to end. M
 Add the dependency:
 ```Groovy
 dependencies {
-	compile 'com.yashoid:office:1.1.0'
+	compile 'com.yashoid:office:1.2.0'
 }
 ```
 
@@ -70,6 +70,7 @@ Many methods are defined in `TaskManager` to send tasks to it for execution. All
 - Methods ending in "AndWait" block the calling thread until the execution finishes.
 - Methods ending in "Immediately" will create a disposable new thread to perform the task immediately.
 - `TaskManager.MAIN` is the section name reserved for main thread.
+- `TaskManager.IMMEDIATELY` is the section name reserved for executing the task on a non-main thread immediately.
 - Calling waiting methods on sections that have only one thread (like main section) will cause a dead lock.
 - `cancel` can be called to cancel the execution of a task. It will return false if the task is in execution or is already finished or not found.
 

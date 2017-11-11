@@ -78,6 +78,16 @@ public abstract class Operation {
         mTaskManager.runTaskAndWait(task);
     }
 
+    public void runTaskImmediately(Task task) {
+        synchronized (mLock) {
+            task.setState(Task.STATE_POSTED);
+
+            mPostedTasks.add(task);
+        }
+
+        mTaskManager.runTaskImmediately(task);
+    }
+
     public void scheduleTask(Task task, Task afterTask) {
         if (afterTask == null) {
             runTask(task);
@@ -116,7 +126,7 @@ public abstract class Operation {
 
         @Override
         public void performTask(Task task) {
-                Operation.this.performTask(task);
+            Operation.this.performTask(task);
         }
 
     };

@@ -16,6 +16,8 @@ import java.util.concurrent.ExecutorService;
 public class TaskManager {
 
     public static final String MAIN = "main";
+    public static final String IMMEDIATELY = "immediately";
+
     public static final String NETWORK = "network";
     public static final String DATABASE_READ = "data_read";
     public static final String DATABASE_READWRITE = "data_readwrite";
@@ -64,12 +66,22 @@ public class TaskManager {
             return;
         }
 
+        if (IMMEDIATELY.equals(section)) {
+            runTaskImmediately(task);
+            return;
+        }
+
         mOffice.assignTask(section, task, priority);
     }
 
     public void runTaskAndWait(String section, Runnable task, int priority) {
         if (MAIN.equals(section)) {
             mOffice.runOnMainThreadAndWait(task);
+            return;
+        }
+
+        if (IMMEDIATELY.equals(section)) {
+            runTaskImmediatelyAndWait(task);
             return;
         }
 

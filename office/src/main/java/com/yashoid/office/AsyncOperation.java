@@ -33,6 +33,10 @@ public abstract class AsyncOperation extends Operation {
             throw new IllegalArgumentException("Background section name can not be null.");
         }
 
+        if (foregroundSection == null) {
+            throw new IllegalArgumentException("Foreground section name can not be null.");
+        }
+
         mForegroundSection = foregroundSection;
         mBackgroundSection = backgroundSection;
     }

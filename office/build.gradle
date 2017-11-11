@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/yasharpm/Office'
     gitUrl = 'https://github.com/yasharpm/Office.git'
 
-    libraryVersion = '1.1.0'
+    libraryVersion = '1.2.0'
 
     developerId = 'yasharpm'
     developerName = 'Yashar PourMohammad'
@@ -25,12 +25,12 @@ ext {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
 
@@ -53,6 +53,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:support-v13:25.3.1'
+    compile 'com.android.support:support-v13:25.3.0'
     testCompile 'junit:junit:4.12'
 }
