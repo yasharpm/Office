@@ -1,14 +1,12 @@
 package com.yashoid.office.util;
 
-import android.support.v4.util.Pools;
-
 import java.util.ArrayList;
 
 /**
  * Created by Yashar on 4/13/2017.
  */
 
-public abstract class FlexiblePool<T> implements Pools.Pool<T> {
+public abstract class FlexiblePool<T> {
 
     private static final int MAXIMUM_POOL_SIZE = 100;
 
@@ -18,7 +16,6 @@ public abstract class FlexiblePool<T> implements Pools.Pool<T> {
         mInstances = new ArrayList<>();
     }
 
-    @Override
     public T acquire() {
         synchronized (this) {
             if (mInstances.size() > 0) {
@@ -35,7 +32,6 @@ public abstract class FlexiblePool<T> implements Pools.Pool<T> {
 
     abstract protected T newInstance();
 
-    @Override
     public boolean release(T instance) {
         synchronized (this) {
             if (mInstances.contains(instance)) {

@@ -1,7 +1,5 @@
 package com.yashoid.office.task;
 
-import android.support.v4.util.Pools;
-
 import com.yashoid.office.util.FlexiblePool;
 
 /**
@@ -17,7 +15,7 @@ public class Task implements Runnable {
     public static final int STATE_EXECUTED = 4;
     public static final int STATE_RELEASED = 5;
 
-    private static Pools.Pool<Task> mPool = null;
+    private static FlexiblePool<Task> mPool = null;
 
     public interface TaskPerformer {
 
@@ -41,7 +39,7 @@ public class Task implements Runnable {
         getPool().release(task);
     }
 
-    private static Pools.Pool<Task> getPool() {
+    private static FlexiblePool<Task> getPool() {
         if (mPool == null) {
             mPool = new FlexiblePool<Task>() {
 

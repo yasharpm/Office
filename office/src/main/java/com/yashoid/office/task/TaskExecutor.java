@@ -1,7 +1,5 @@
 package com.yashoid.office.task;
 
-import android.support.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -42,7 +40,6 @@ class TaskExecutor extends AbstractExecutorService {
         shutdownNow();
     }
 
-    @NonNull
     @Override
     public List<Runnable> shutdownNow() {
         synchronized (mTaskLock) {
